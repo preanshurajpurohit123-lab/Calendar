@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your calendar — Ritual</title>
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  body{ background:var(--parchment); }
+  header.app{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1rem clamp(1rem,4vw,2.5rem);
+    background:var(--navy-deep);
+    color:var(--cream);
+    position:sticky; top:0; z-index:20;
+    box-shadow:0 4px 16px rgba(20,35,58,0.25);
+  }
+  .brand{ display:flex; align-items:center; gap:.55rem; text-decoration:none; }
+  .brand img{ width:30px; height:30px; object-fit:contain; }
+  .brand span{ font-family:var(--font-display); font-weight:600; color:var(--cream); font-size:1.05rem; }
+  .app-actions{ display:flex; align-items:center; gap:.9rem; }
+  .who{ font-size:.85rem; color:rgba(253,248,236,0.75); }
+  .app-actions .btn-ghost{ border-color:rgba(253,248,236,0.45); color:var(--cream); padding:.55rem 1.1rem; font-size:.85rem; }
+  .app-actions .btn-ghost:hover{ background:rgba(253,248,236,0.12); border-color:var(--cream); }
+
+  main.app-main{
+    padding:2.4rem 1rem 4rem;
+    display:flex; justify-content:center;
+  }
+  .frame-wrap{
+    width:100%;
+    max-width:460px;
+    background:var(--cream);
+    border:1px solid var(--paper-line);
+    border-radius:18px;
+    box-shadow:var(--shadow-lift);
+    overflow:hidden;
+  }
+  iframe#calendarFrame{
+    width:100%;
+    height:660px;
+    border:0;
+    display:block;
+  }
+  .gate{
+    max-width:420px; margin:5rem auto; text-align:center; padding:0 1.4rem;
+  }
+  .gate h1{ font-family:var(--font-display); color:var(--navy); }
+  .gate p{ color:#5f5340; }
+</style>
+</head>
+<body>
+
+<header class="app">
+  <a class="brand" href="index.html">
+    <img src="assets/logo.png" alt="Ritual logo">
+    <span>Ritual</span>
+  </a>
+  <div class="app-actions">
+    <span class="who" id="whoLabel"></span>
+    <button class="btn btn-ghost" id="logoutBtn">Log out</button>
+  </div>
+</header>
+
+<main class="app-main" id="mainArea">
+  <div class="frame-wrap">
+    <iframe id="calendarFrame" src="app-widget.html" title="Ritual monthly routine tracker"></iframe>
+  </div>
+</main>
+
+<script>
+  // Lightweight client-side auth guard.
+  // Swap sessionStorage for your real session/token check in production.
+  (function () {
+    const raw = sessionStorage.getItem('ritual_session');
+    const whoLabel = document.getElementById('whoLabel');
+    if (!raw) {
+      document.getElementById('mainArea').innerHTML =
+        '<div class="gate"><h1>You\'re signed out</h1><p>Log in to open this month\'s calendar.</p>' +
+        '<a class="btn btn-primary" href="login.html">Go to log in</a></div>';
+      return;
+    }
+    try {
+      const session = JSON.parse(raw);
+      if (whoLabel) whoLabel.textContent = session.email || '';
+    } catch (e) { /* ignore malformed session */ }
+  })();
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    sessionStorage.removeItem('ritual_session');
+    window.location.href = 'login.html';
+  });
+</script>
+</body>
+</html>

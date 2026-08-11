@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — Ritual</title>
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  body{
+    min-height:100vh;
+    display:flex;
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(204,164,66,0.16), transparent 55%),
+      radial-gradient(ellipse at 100% 100%, rgba(181,101,43,0.12), transparent 50%),
+      var(--cream);
+  }
+  .back{
+    position:fixed; top:1.4rem; left:1.4rem; z-index:5;
+    display:flex; align-items:center; gap:.4rem;
+    font-size:.85rem; font-weight:600; color:var(--navy); text-decoration:none;
+    opacity:.75;
+  }
+  .back:hover{ opacity:1; }
+
+  .split{ display:flex; width:100%; min-height:100vh; }
+
+  /* Left: brand panel */
+  .panel{
+    position:relative;
+    flex:1 1 46%;
+    display:flex; flex-direction:column; justify-content:space-between;
+    padding:3rem clamp(1.6rem,4vw,3.4rem);
+    background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 68%);
+    color:var(--cream);
+    overflow:hidden;
+  }
+  .panel::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(204,164,66,0.18), transparent 40%),
+      radial-gradient(circle at 85% 85%, rgba(181,101,43,0.22), transparent 45%);
+    pointer-events:none;
+  }
+  .panel-top{ position:relative; z-index:1; display:flex; align-items:center; gap:.6rem; }
+  .panel-top img{ width:36px; height:36px; object-fit:contain; }
+  .panel-top span{ font-family:var(--font-display); font-size:1.15rem; font-weight:600; }
+
+  .panel-mid{ position:relative; z-index:1; max-width:420px; }
+  .panel-mid .eyebrow{ color:var(--gold); }
+  .panel-mid h1{
+    font-family:var(--font-display); font-weight:600;
+    font-size:clamp(1.8rem,3vw,2.5rem); line-height:1.2; margin:.7rem 0 1rem;
+  }
+  .panel-mid p{ color:rgba(253,248,236,0.78); line-height:1.65; font-size:.98rem; }
+
+  .panel-quote{
+    position:relative; z-index:1;
+    border-top:1px solid rgba(253,248,236,0.18);
+    padding-top:1.2rem;
+    font-size:.85rem;
+    color:rgba(253,248,236,0.65);
+  }
+
+  /* Right: form panel */
+  .form-side{
+    flex:1 1 54%;
+    display:flex; align-items:center; justify-content:center;
+    padding:3rem 1.4rem;
+  }
+  .form-card{
+    width:100%; max-width:400px;
+  }
+  .form-head{ text-align:left; margin-bottom:2rem; }
+  .form-head img{ width:44px; height:44px; margin-bottom:1rem; }
+  .form-head h2{
+    font-family:var(--font-display); font-weight:600; color:var(--navy);
+    font-size:1.7rem; margin:0 0 .4rem;
+  }
+  .form-head p{ color:#71634a; font-size:.92rem; margin:0; }
+  .form-head p a{ color:var(--terracotta); font-weight:600; text-decoration:none; }
+  .form-head p a:hover{ text-decoration:underline; }
+
+  .social-row{ display:grid; grid-template-columns:1fr 1fr; gap:.75rem; margin-bottom:1.5rem; }
+  .btn-social{
+    display:flex; align-items:center; justify-content:center; gap:.55rem;
+    border:1px solid var(--paper-line);
+    background:var(--cream);
+    border-radius:10px;
+    padding:.7rem .6rem;
+    font-size:.85rem; font-weight:600; color:var(--ink);
+    cursor:pointer; text-decoration:none;
+    transition:border-color .18s ease, background .18s ease;
+  }
+  .btn-social:hover{ border-color:var(--gold-deep); background:var(--parchment); }
+  .btn-social svg{ width:17px; height:17px; flex:none; }
+
+  .divider{ display:flex; align-items:center; gap:.8rem; margin:1.5rem 0; color:#8a7a5c; font-size:.78rem; }
+  .divider::before, .divider::after{ content:""; flex:1; height:1px; background:var(--paper-line); }
+
+  .field{ margin-bottom:1.15rem; }
+  .field label{
+    display:block; font-size:.82rem; font-weight:600; color:var(--navy); margin-bottom:.4rem;
+  }
+  .input-wrap{ position:relative; }
+  .field input{
+    width:100%;
+    padding:.78rem .9rem;
+    border:1px solid var(--paper-line);
+    border-radius:10px;
+    background:var(--cream);
+    font-family:var(--font-body);
+    font-size:.95rem;
+    color:var(--ink);
+    transition:border-color .18s ease, box-shadow .18s ease;
+  }
+  .field input::placeholder{ color:#b0a381; }
+  .field input:focus{
+    outline:none;
+    border-color:var(--terracotta);
+    box-shadow:0 0 0 3px rgba(181,101,43,0.14);
+  }
+  .toggle-pw{
+    position:absolute; right:.7rem; top:50%; transform:translateY(-50%);
+    background:none; border:none; cursor:pointer; padding:.2rem;
+    color:#8a7a5c; display:flex;
+  }
+  .toggle-pw:hover{ color:var(--terracotta); }
+
+  .row-between{ display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; font-size:.85rem; }
+  .remember{ display:flex; align-items:center; gap:.5rem; color:#5f5340; }
+  .remember input{ accent-color:var(--terracotta); width:15px; height:15px; }
+  .forgot{ color:var(--terracotta); font-weight:600; text-decoration:none; }
+  .forgot:hover{ text-decoration:underline; }
+
+  .form-error{
+    display:none;
+    background:rgba(181,101,43,0.1);
+    border:1px solid rgba(181,101,43,0.35);
+    color:var(--terracotta-deep);
+    font-size:.83rem;
+    padding:.7rem .85rem;
+    border-radius:10px;
+    margin-bottom:1.1rem;
+  }
+  .form-error.show{ display:block; }
+
+  .terms{ margin-top:1.6rem; text-align:center; font-size:.76rem; color:#9a8c6c; line-height:1.6; }
+  .terms a{ color:var(--terracotta); text-decoration:none; font-weight:600; }
+  .terms a:hover{ text-decoration:underline; }
+
+  @media (max-width:860px){
+    .panel{ display:none; }
+    .form-side{ padding:5.5rem 1.4rem 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<a class="back" href="index.html">&larr; Back to Ritual</a>
+
+<div class="split">
+  <aside class="panel">
+    <div class="panel-top">
+      <img src="assets/logo.png" alt="Ritual logo">
+      <span>Ritual</span>
+    </div>
+    <div class="panel-mid">
+      <div class="eyebrow">Welcome back</div>
+      <h1>Pick up your calendar right where you left it.</h1>
+      <p>Your habits, reminders, and this month's log are waiting on today's page.</p>
+    </div>
+    <div class="panel-quote">
+      &ldquo;A small, kept promise, once a day.&rdquo;
+    </div>
+  </aside>
+
+  <main class="form-side">
+    <div class="form-card">
+      <div class="form-head">
+        <img src="assets/logo.png" alt="Ritual logo">
+        <h2>Log in to Ritual</h2>
+        <p>New here? <a href="#" id="toSignup">Create an account</a></p>
+      </div>
+
+      <div class="social-row">
+        <button type="button" class="btn-social" id="googleBtn">
+          <svg viewBox="0 0 24 24"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.3-1.7 3.8-5.5 3.8-3.3 0-6-2.75-6-6.1s2.7-6.1 6-6.1c1.9 0 3.15.8 3.9 1.5l2.65-2.55C16.85 3.05 14.65 2 12 2 6.9 2 2.75 6.1 2.75 11.2S6.9 20.4 12 20.4c6.05 0 10.2-4.25 10.2-10.25 0-.7-.08-1.2-.17-1.75H12z"/></svg>
+          Google
+        </button>
+        <button type="button" class="btn-social" id="appleBtn">
+          <svg viewBox="0 0 24 24"><path fill="#1e334e" d="M16.7 1.4c0 1.1-.45 2.15-1.1 2.9-.75.85-1.95 1.5-3 1.4-.1-1.05.42-2.15 1.1-2.85.75-.8 2.05-1.4 3-1.45zm3.9 16.05c-.55 1.25-.85 1.8-1.6 2.9-1.05 1.55-2.5 3.5-4.35 3.5-1.6 0-2.05-1.05-4.25-1.05-2.2 0-2.7 1.02-4.3 1.07-1.75.06-3.1-1.65-4.15-3.2-2.15-3.15-3.8-8.9-1.6-12.8 1.1-1.95 3.05-3.15 5.15-3.2 1.65-.03 3.15 1.1 4.15 1.1s2.85-1.35 4.8-1.15c.85.04 3.2.35 4.7 2.6-.12.08-2.8 1.65-2.75 4.9.05 3.9 3.4 5.2 3.2 5.33z"/></svg>
+          Apple
+        </button>
+      </div>
+
+      <div class="divider">or continue with email</div>
+
+      <div class="form-error" id="formError">Enter a valid email and password to continue.</div>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required minlength="6">
+            <button type="button" class="toggle-pw" id="togglePw" aria-label="Show password">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="row-between">
+          <label class="remember"><input type="checkbox" name="remember"> Remember me</label>
+          <a class="forgot" href="#">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Log in</button>
+      </form>
+
+      <p class="terms">By continuing, you agree to Ritual's <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
+    </div>
+  </main>
+</div>
+
+<script>
+  const form = document.getElementById('loginForm');
+  const errorBox = document.getElementById('formError');
+  const togglePw = document.getElementById('togglePw');
+  const pwInput = document.getElementById('password');
+  const submitBtn = document.getElementById('submitBtn');
+
+  togglePw.addEventListener('click', () => {
+    const isPw = pwInput.type === 'password';
+    pwInput.type = isPw ? 'text' : 'password';
+    togglePw.setAttribute('aria-label', isPw ? 'Hide password' : 'Show password');
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    const pw = pwInput.value;
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    if (!emailOk || pw.length < 6) {
+      errorBox.classList.add('show');
+      return;
+    }
+    errorBox.classList.remove('show');
+
+    // Demo auth stand-in: replace this block with a real API call.
+    submitBtn.textContent = 'Logging in…';
+    submitBtn.disabled = true;
+    try {
+      sessionStorage.setItem('ritual_session', JSON.stringify({ email, ts: Date.now() }));
+    } catch (err) { /* storage unavailable — continue anyway */ }
+
+    setTimeout(() => { window.location.href = 'app.html'; }, 500);
+  });
+
+  document.getElementById('googleBtn').addEventListener('click', () => {
+    alert('Wire this button up to your OAuth provider (Google) in production.');
+  });
+  document.getElementById('appleBtn').addEventListener('click', () => {
+    alert('Wire this button up to your OAuth provider (Apple) in production.');
+  });
+  document.getElementById('toSignup').addEventListener('click', (e) => {
+    e.preventDefault();
+    alert('Point this link to your sign-up page.');
+  });
+</script>
+</body>
+</html>

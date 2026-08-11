@@ -1,0 +1,103 @@
+/* ============================================================
+   Ritual — shared theme
+   Palette derived from the Ritual mark: parchment, ink navy,
+   antique gold, and terracotta.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  --navy:        #1e334e;
+  --navy-deep:   #14233a;
+  --ink:         #3c2814;
+  --gold:        #cca442;
+  --gold-deep:   #a3835a;
+  --terracotta:  #b5652b;
+  --terracotta-deep: #8a4a26;
+  --olive:       #6f7d45;
+  --cream:       #fdf8ec;
+  --parchment:   #f3ecd9;
+  --parchment-2: #ece2c9;
+  --paper-line:  #d2c7ab;
+
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Inter', sans-serif;
+
+  --shadow-soft: 0 10px 30px rgba(60,40,20,0.12);
+  --shadow-lift: 0 18px 45px rgba(30,51,78,0.18);
+  --radius: 14px;
+}
+
+*{ box-sizing:border-box; }
+
+html{ scroll-behavior:smooth; }
+
+body{
+  margin:0;
+  font-family:var(--font-body);
+  background:var(--cream);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+
+img{ max-width:100%; display:block; }
+
+a{ color:inherit; }
+
+::selection{ background:var(--gold); color:var(--navy-deep); }
+
+/* Focus visibility, kept even when a mouse user restyles buttons */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible{
+  outline: 2px solid var(--terracotta);
+  outline-offset: 3px;
+}
+
+.eyebrow{
+  font-family:var(--font-body);
+  font-weight:600;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-size:.72rem;
+  color:var(--terracotta-deep);
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.5rem;
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:.95rem;
+  padding:.85rem 1.6rem;
+  border-radius:999px;
+  border:1px solid transparent;
+  cursor:pointer;
+  text-decoration:none;
+  transition:transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease, border-color .18s ease;
+  line-height:1;
+}
+.btn:active{ transform:translateY(1px); }
+
+.btn-primary{
+  background:linear-gradient(180deg,var(--terracotta),var(--terracotta-deep));
+  color:var(--cream);
+  box-shadow:var(--shadow-soft);
+}
+.btn-primary:hover{ box-shadow:var(--shadow-lift); transform:translateY(-1px); }
+
+.btn-ghost{
+  background:transparent;
+  color:var(--navy);
+  border-color:rgba(30,51,78,0.25);
+}
+.btn-ghost:hover{ border-color:var(--navy); background:rgba(30,51,78,0.05); }
+
+.btn-block{ width:100%; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+}
